@@ -1,0 +1,96 @@
+<html>
+<head>
+  <style>
+  .on-button {
+    background-color: red;
+    border: none;
+    color: white;
+    padding: 15px 30px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 30px;
+    margin: 4px 2px;
+    cursor: pointer;
+  }
+  </style>
+  <style>
+  .off-button {
+    background-color: blue;
+    border: none;
+    color: white;
+    padding: 15px 30px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 30px;
+    margin: 4px 2px;
+    cursor: pointer;
+  }
+  
+</style>
+</head>
+  <body>
+      <h2>ToT Cloud Remote LED Control Wep App</h2>
+      <h1 id="OUT_TEXT"></h1>
+      
+      <button class="on-button" id = "onBtn" >LED ON</button>
+      <button class="off-button" id = "offBtn" >LED OFF</button>
+
+      <script type="module">
+      // Import the functions you need from the SDKs you need
+        // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-analytics.js";
+        import { getDatabase, ref, set, get, onValue, child} from "https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js";
+        // export { getDatabase, ref, set, get, onValue, child };
+        
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+    apiKey: "AIzaSyDfYiQAEi9I1TDscBuCYbMjbV3NYzShIFw",
+    authDomain: "led-android-fb.firebaseapp.com",
+    databaseURL: "https://led-android-fb-default-rtdb.firebaseio.com",
+    projectId: "led-android-fb",
+    storageBucket: "led-android-fb.appspot.com",
+    messagingSenderId: "108888214469",
+    appId: "1:108888214469:web:05eed88577dbf4626ed9ac",
+    measurementId: "G-PEQX093902"
+  };
+      
+        // Initialize Firebase
+        
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getDatabase(app);
+        console.log(db);
+
+        const dbRef = ref(db, 'LED_STATUS'); 
+
+        var OnButton = document.getElementById("onBtn");
+        OnButton.addEventListener("click", onBtnClick, false);
+
+        var OffButton = document.getElementById("offBtn");
+        OffButton.addEventListener("click", offBtnClick, false);
+
+        //onbtn클릭시 ON으로 변경
+        function onBtnClick(event) {
+          set(dbRef, 'ON'); 
+          console.log("LED ON");
+        }
+         //offbtn클릭시 OFF으로 변경                                              
+        function offBtnClick() {
+          set(dbRef, 'OFF');
+          console.log("LED OFF");
+        }
+
+        onValue(dbRef, (snapshot) => {
+            console.log(snapshot.val());
+            OUT_TEXT.innerText = 'LED is ' + snapshot.val();
+        })
+      </script>
+    </body>
+</html>
